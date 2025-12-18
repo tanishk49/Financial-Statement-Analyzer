@@ -2,12 +2,20 @@
 
 {% block content %}
 
-<h2 class="mb-4">Financial Analysis Dashboard</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Financial Analysis Dashboard</h2>
+
+    <a href="{{ url_for('upload_file') }}"
+       class="btn btn-outline-success">
+        Analyze New Data
+    </a>
+</div>
 
 <!-- ===================== -->
 <!-- PROFITABILITY -->
 <!-- ===================== -->
 <h4 class="mt-4">Profitability Analysis</h4>
+
 <div class="row mb-3">
     {% for key, value in summary_metrics.items() %}
         {% if "ROE" in key or "ROA" in key or "Margin" in key %}
@@ -32,12 +40,19 @@
     {% endfor %}
 </div>
 
+{% if interpretation.profitability %}
+<p class="text-muted mt-2">
+    {{ interpretation.profitability }}
+</p>
+{% endif %}
+
 <hr>
 
 <!-- ===================== -->
 <!-- LIQUIDITY -->
 <!-- ===================== -->
 <h4 class="mt-4">Liquidity Analysis</h4>
+
 <div class="row mb-3">
     {% for key, value in summary_metrics.items() %}
         {% if "Current Ratio" in key %}
@@ -62,12 +77,19 @@
     {% endfor %}
 </div>
 
+{% if interpretation.liquidity %}
+<p class="text-muted mt-2">
+    {{ interpretation.liquidity }}
+</p>
+{% endif %}
+
 <hr>
 
 <!-- ===================== -->
 <!-- LEVERAGE -->
 <!-- ===================== -->
 <h4 class="mt-4">Leverage Analysis</h4>
+
 <div class="row mb-3">
     {% for key, value in summary_metrics.items() %}
         {% if "Debt" in key %}
@@ -92,6 +114,12 @@
     {% endfor %}
 </div>
 
+{% if interpretation.leverage %}
+<p class="text-muted mt-2">
+    {{ interpretation.leverage }}
+</p>
+{% endif %}
+
 <hr>
 
 <!-- ===================== -->
@@ -105,11 +133,16 @@
 <hr>
 
 <!-- ===================== -->
-<!-- PDF EXPORT -->
+<!-- EXPORT ACTIONS -->
 <!-- ===================== -->
 <a href="{{ url_for('download_report') }}"
-   class="btn btn-success mt-3">
+   class="btn btn-success mt-3 me-2">
    Download PDF Report
+</a>
+
+<a href="{{ url_for('download_metrics') }}"
+   class="btn btn-outline-primary mt-3">
+   Download Metrics (CSV)
 </a>
 
 {% endblock %}

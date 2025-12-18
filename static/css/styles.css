@@ -1,26 +1,74 @@
 body {
-    background-color: #f4f6f9;
+    background-color: #f5f7f6;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Navbar */
 .navbar {
-    padding: 15px;
+    background-color: #1f2933 !important;
 }
 
-.card {
-    border: none;
-    border-radius: 10px;
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-}
-
-h3, h4 {
+/* Headings */
+h2, h4 {
+    color: #1f2933;
     font-weight: 600;
 }
 
-code {
-    background: #f1f1f1;
-    padding: 6px;
-    display: block;
-    border-radius: 5px;
+/* Cards */
+.card {
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* KPI cards */
+.card h6 {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.card h4 {
+    color: #107c41; /* Excel green */
+    font-weight: 700;
+}
+
+/* Buttons */
+.btn-success {
+    background-color: #107c41;
+    border-color: #107c41;
+}
+
+.btn-success:hover {
+    background-color: #0e6e3a;
+}
+
+.btn-outline-success {
+    color: #107c41;
+    border-color: #107c41;
+}
+
+.btn-outline-success:hover {
+    background-color: #107c41;
+    color: white;
+}
+
+/* Section dividers */
+hr {
+    margin: 2.5rem 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Tables */
+.table thead {
+    background-color: #e6f4ea;
+}
+
+.table th {
+    font-weight: 600;
+}
+
+/* Insight text */
+.text-muted {
+    font-size: 0.95rem;
 }

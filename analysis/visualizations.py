@@ -1,4 +1,5 @@
-# analysis/visualizations.py
+import matplotlib
+matplotlib.use("Agg")
 
 import os
 import matplotlib.pyplot as plt

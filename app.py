@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
 import os
 
+# ------------------------
+# Imports
+# ------------------------
+
 # Preprocessing
 from analysis.preprocess import load_financial_data, clean_financial_data
 
@@ -17,11 +21,12 @@ from analysis.visualizations import generate_trend_plots
 from reports.report_generator import generate_pdf_report
 
 
+# ------------------------
+# App Initialization
+# ------------------------
+
 app = Flask(__name__)
 
-# ------------------------
-# Configuration
-# ------------------------
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
@@ -29,6 +34,53 @@ PLOT_FOLDER = os.path.join(BASE_DIR, "static", "plots")
 REPORT_FOLDER = os.path.join(BASE_DIR, "static", "reports")
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+# ------------------------
+# Helper: Financial Interpretation
+# ------------------------
+
+def generate_interpretation(summary_metrics: dict) -> dict:
+    insights = {}
+
+    roe = summary_metrics.get("ROE (%)")
+    cr = summary_metrics.get("Current Ratio")
+    de = summary_metrics.get("Debt-Equity")
+
+    # Profitability
+    if roe is not None:
+        if roe >= 20:
+            insights["profitability"] = (
+                "The company demonstrates strong profitability with healthy returns on equity."
+            )
+        else:
+            insights["profitability"] = (
+                "Profitability remains moderate, indicating scope for operational efficiency improvements."
+            )
+
+    # Liquidity
+    if cr is not None:
+        if cr >= 1.5:
+            insights["liquidity"] = (
+                "Liquidity position is comfortable, suggesting the firm can meet short-term obligations effectively."
+            )
+        else:
+            insights["liquidity"] = (
+                "Liquidity appears tight, which may pose short-term solvency risks."
+            )
+
+    # Leverage
+    if de is not None:
+        if de <= 1.5:
+            insights["leverage"] = (
+                "Leverage is well-controlled, indicating a balanced capital structure."
+            )
+        else:
+            insights["leverage"] = (
+                "Higher leverage levels indicate increased financial risk."
+            )
+
+    return insights
 
 
 # ------------------------
@@ -56,6 +108,14 @@ def upload_file():
         summary_metrics = compute_latest_metrics(df_clean)
 
         # ------------------------
+        # Save Computed Metrics (CSV Export)
+        # ------------------------
+        metrics_csv_path = os.path.join(
+            REPORT_FOLDER, "computed_financial_metrics.csv"
+        )
+        trend_df.round(2).to_csv(metrics_csv_path, index=False)
+
+        # ------------------------
         # Generate Charts
         # ------------------------
         plot_paths = generate_trend_plots(
@@ -66,7 +126,9 @@ def upload_file():
         # ------------------------
         # Generate PDF Report
         # ------------------------
-        pdf_path = os.path.join(REPORT_FOLDER, "financial_analysis_report.pdf")
+        pdf_path = os.path.join(
+            REPORT_FOLDER, "financial_analysis_report.pdf"
+        )
 
         generate_pdf_report(
             output_path=pdf_path,
@@ -74,9 +136,15 @@ def upload_file():
             plot_paths=plot_paths
         )
 
+        # ------------------------
+        # Generate Financial Interpretation
+        # ------------------------
+        interpretation = generate_interpretation(summary_metrics)
+
         return render_template(
             "metrics.html",
             summary_metrics=summary_metrics,
+            interpretation=interpretation,
             tables=[
                 trend_df.round(2).to_html(
                     classes="table table-striped",
@@ -98,9 +166,18 @@ def download_report():
     return send_file(pdf_path, as_attachment=True)
 
 
+@app.route("/download-metrics")
+def download_metrics():
+    csv_path = os.path.join(
+        REPORT_FOLDER, "computed_financial_metrics.csv"
+    )
+    return send_file(csv_path, as_attachment=True)
+
+
 # ------------------------
 # App Entry Point
 # ------------------------
+
 if __name__ == "__main__":
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     os.makedirs(PLOT_FOLDER, exist_ok=True)
