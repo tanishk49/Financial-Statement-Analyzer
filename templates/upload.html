@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="card p-4">
+            <h3 class="mb-3">Financial Statement Analyzer</h3>
+
+            <p class="text-muted">
+                Upload multi-year financial statements (CSV) to compute key
+                profitability, liquidity, and leverage metrics with trend analysis.
+            </p>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">
+                        Upload Financial Statement (CSV)
+                    </label>
+                    <input type="file"
+                           name="file"
+                           class="form-control"
+                           required>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Run Financial Analysis
+                </button>
+            </form>
+
+            <hr>
+
+            <h6>Supported Metrics</h6>
+            <ul class="text-muted">
+                <li>Return on Equity (ROE)</li>
+                <li>Return on Assets (ROA)</li>
+                <li>Debt–Equity Ratio</li>
+                <li>Net Profit Margin</li>
+            </ul>
+
+            <h6>Expected CSV Columns</h6>
+            <code>
+                year, revenue, net_income, total_assets,
+                total_liabilities, shareholders_equity
+            </code>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

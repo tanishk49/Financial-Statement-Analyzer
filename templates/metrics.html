@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Financial Analysis Dashboard</h2>
+
+<!-- ===================== -->
+<!-- PROFITABILITY -->
+<!-- ===================== -->
+<h4 class="mt-4">Profitability Analysis</h4>
+<div class="row mb-3">
+    {% for key, value in summary_metrics.items() %}
+        {% if "ROE" in key or "ROA" in key or "Margin" in key %}
+        <div class="col-md-3">
+            <div class="card text-center p-3">
+                <h6 class="text-muted">{{ key }}</h6>
+                <h4>{{ value }}</h4>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="row">
+    {% for plot in plots %}
+        {% if "roe" in plot or "roa" in plot or "margin" in plot %}
+        <div class="col-md-6 mb-3">
+            <img src="{{ url_for('static', filename='plots/' + plot) }}"
+                 class="img-fluid">
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<hr>
+
+<!-- ===================== -->
+<!-- LIQUIDITY -->
+<!-- ===================== -->
+<h4 class="mt-4">Liquidity Analysis</h4>
+<div class="row mb-3">
+    {% for key, value in summary_metrics.items() %}
+        {% if "Current Ratio" in key %}
+        <div class="col-md-3">
+            <div class="card text-center p-3">
+                <h6 class="text-muted">{{ key }}</h6>
+                <h4>{{ value }}</h4>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="row">
+    {% for plot in plots %}
+        {% if "current_ratio" in plot %}
+        <div class="col-md-6 mb-3">
+            <img src="{{ url_for('static', filename='plots/' + plot) }}"
+                 class="img-fluid">
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<hr>
+
+<!-- ===================== -->
+<!-- LEVERAGE -->
+<!-- ===================== -->
+<h4 class="mt-4">Leverage Analysis</h4>
+<div class="row mb-3">
+    {% for key, value in summary_metrics.items() %}
+        {% if "Debt" in key %}
+        <div class="col-md-3">
+            <div class="card text-center p-3">
+                <h6 class="text-muted">{{ key }}</h6>
+                <h4>{{ value }}</h4>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="row">
+    {% for plot in plots %}
+        {% if "debt_equity" in plot %}
+        <div class="col-md-6 mb-3">
+            <img src="{{ url_for('static', filename='plots/' + plot) }}"
+                 class="img-fluid">
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<hr>
+
+<!-- ===================== -->
+<!-- FULL METRICS TABLE -->
+<!-- ===================== -->
+<h4 class="mt-4">Complete Financial Metrics (Multi-Year)</h4>
+{% for table in tables %}
+    {{ table | safe }}
+{% endfor %}
+
+<hr>
+
+<!-- ===================== -->
+<!-- PDF EXPORT -->
+<!-- ===================== -->
+<a href="{{ url_for('download_report') }}"
+   class="btn btn-success mt-3">
+   Download PDF Report
+</a>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+body {
+    background-color: #f4f6f9;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    padding: 15px;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+h3, h4 {
+    font-weight: 600;
+}
+
+code {
+    background: #f1f1f1;
+    padding: 6px;
+    display: block;
+    border-radius: 5px;
+}
