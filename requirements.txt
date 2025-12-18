@@ -1,0 +1,6 @@
+Flask==3.0.0
+pandas==2.1.4
+numpy==1.26.4
+matplotlib==3.8.2
+seaborn==0.13.2
+reportlab==4.1.0
